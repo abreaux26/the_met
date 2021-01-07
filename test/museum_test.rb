@@ -16,6 +16,7 @@ class MuseumTest < Minitest::Test
 
     assert_equal "Denver Museum of Nature and Science", dmns.name
     assert_equal [], dmns.exhibits
+    assert_equal [], dmns.patrons
   end
 
   def test_add_exhibit
@@ -42,5 +43,14 @@ class MuseumTest < Minitest::Test
     patron_1.add_interest("Gems and Minerals")
 
     assert_equal [gems_and_minerals], dmns.recommend_exhibits(patron_1)
+  end
+
+  def test_admit
+    dmns = Museum.new("Denver Museum of Nature and Science")
+    patron_1 = Patron.new("Bob", 0)
+
+    dmns.admit(patron_1)
+
+    assert_equal [patron_1], dmns.patrons
   end
 end

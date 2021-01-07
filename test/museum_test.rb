@@ -1,6 +1,7 @@
 require 'minitest/autorun'
 require 'minitest/pride'
 require './lib/exhibit'
+require './lib/patron'
 require './lib/museum'
 
 class MuseumTest < Minitest::Test
@@ -26,5 +27,20 @@ class MuseumTest < Minitest::Test
     dmns.add_exhibit(imax)
 
     assert_equal [gems_and_minerals, imax], dmns.exhibits
+  end
+
+  def test_recomment_exhibits
+    dmns = Museum.new("Denver Museum of Nature and Science")
+
+    gems_and_minerals = Exhibit.new({name: "Gems and Minerals", cost: 0})
+    imax = Exhibit.new({name: "IMAX",cost: 15})
+    dmns.add_exhibit(gems_and_minerals)
+    dmns.add_exhibit(imax)
+
+    patron_1 = Patron.new("Bob", 20)
+    patron_1.add_interest("Dead Sea Scrolls")
+    patron_1.add_interest("Gems and Minerals")
+
+    assert_equal [gems_and_minerals], dmns.recommend_exhibits(patron_1)
   end
 end

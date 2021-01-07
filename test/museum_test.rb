@@ -149,7 +149,7 @@ class MuseumTest < Minitest::Test
     dmns.admit(patron_2)
     dmns.admit(patron_3)
 
-    assert_instance_of Patron, dmns.draw_lottery_winner(imax)
+    assert_equal "Bob", dmns.draw_lottery_winner(imax)
     assert_nil dmns.draw_lottery_winner(gems_and_minerals)
   end
 
@@ -168,7 +168,7 @@ class MuseumTest < Minitest::Test
     patron_2 = Patron.new("Sally", 20)
     patron_2.add_interest("IMAX")
 
-    patron_3 = Patron.new("Johnny", 15)
+    patron_3 = Patron.new("Johnny", 5)
     patron_3.add_interest("IMAX")
 
     dmns.admit(patron_1)
@@ -176,11 +176,13 @@ class MuseumTest < Minitest::Test
     dmns.admit(patron_3)
 
     winner = mock
-    winner.stubs(:announcement).returns("Bob has won the IMAX exhibit lottery")
+    name = dmns.draw_lottery_winner(imax)
+    winner.stubs(:name).returns("Bob")
+    announcement = "#{winner.name} has won the IMAX exhibit lottery"
 
     no_winner = "No winners for this lottery"
 
-    assert_equal winner.announcement, dmns.announce_lottery_winner(imax)
+    assert_equal announcement, dmns.announce_lottery_winner(imax)
     assert_equal no_winner, dmns.announce_lottery_winner(gems_and_minerals)
   end
 end
